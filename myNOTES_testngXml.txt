@@ -1,0 +1,172 @@
+-------------------//normal tesng.xml ::
+
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="TestSuites">
+
+    <test name="RegressionTests">
+        <classes>
+            <class name="tests.FrameworkBuildDataDrivenTest"/>
+            <class name="tests.MoreUIValidationsTest"/>
+            <class name="tests.UIValidationContinueTest"/>
+        </classes>
+    </test>
+
+
+</suite>
+
+
+--------//normal testng.xml when multiple tests:::
+
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="TestSuites">
+
+    <test name="RegressionTests">
+        <classes>
+            <class name="tests.FrameworkBuildDataDrivenTest"/>
+            <class name="tests.MoreUIValidationsTest"/>
+            <class name="tests.UIValidationContinueTest"/>
+        </classes>
+    </test>
+    <test name="SmokeTests">
+            <classes>
+                <class name="tests.BasicTestInitial"/>
+            </classes>
+        </test>
+
+
+</suite>
+
+-------------------------//to run parallel mode
+---// we can do parallel based on tests, classes and methods.
+---// we should always avoid running parallel based on methods, as there may be dependency of one methods to another.
+...//we mentioned thread-count= 3 , it means it will open 3 instances together and run each class separately but together in parallel
+
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="TestSuites" parallel="classes" thread-count="3">
+
+    <test name="RegressionTests">
+        <classes>
+            <class name="tests.FrameworkBuildDataDrivenTest"/>
+            <class name="tests.MoreUIValidationsTest"/>
+            <class name="tests.UIValidationContinueTest"/>
+        </classes>
+    </test>
+
+
+</suite>
+
+
+......................................// how to run only specific/selected @Test....add group>run>include
+
+...// verbose="10" defines the highest possible logging level for TestNG in your console window.It controls how much information TestNG prints out while running your tests.
+..// it is used for debugging else not required, even if not declared, it act as verbose ="1" by default
+
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="TestSuites" verbose="1" parallel="classes" thread-count="2">
+
+    <test name="RegressionTests">
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.FrameworkBuildDataDrivenTest"/>
+            <class name="tests.MoreUIValidationsTest"/>
+            <class name="tests.UIValidationContinueTest"/>
+            <class name="tests.FrameworkBuildTest"/>
+        </classes>
+    </test>
+
+
+</suite>
+
+
+--------------------------//---------------------------//-------------------------------------------------//--------------------//---
+//RUn your maven project with Maven Build, It is necessary for CICD pipeline.. we can find this in "maven testNG integration documents" from https://maven.apache.org/surefire/maven-surefire-plugin/examples/testng.html
+// we also need "TestNG Engine For The JUnit Platform" for this in side dependency
+
+// add below code in pom.xml after <depencencies/>, if we want to run based on group
+//NOTE: whatever we add or modify, we have to do it within <configuration> only and if we do not provide any configuration tag, then it will run all the test cases from all classes by default.
+
+
+<plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.6.0-M1</version>
+        <configuration>
+          <groups>smoke</groups>
+        </configuration>
+      </plugin>
+</plugins>
+
+
+//------------------// do we need to change pom.xml every time if we want run only smoke test or wanted to run all test cases ??? NO.------//----
+// In maven there is concept of Profiles same like dependencies
+// inside <profiles>, we can add multiple <profile> and in those profile we can define whether to run all test on only smoke test etc...
+
+// Syntax would be ,
+        <profiles>
+                <profile>
+                            <!--profile one for all test cases to run-->
+                </profile>
+
+                <profile>
+                            <!--profile two for smoke to run-->
+                </profile>
+
+            </profiles>
+
+// we separate profile by id, and we place that <build> of surefire plugin inside <profile>
+// to run above use command "mvn test -PRegression"      here -P stand for ProfileToRun
+//complete syntax
+
+<profiles>
+        <profile>
+            <!--profile one for all test cases to run-->
+            <id>Regression</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.6.0-M1</version>
+                    </plugin>
+                </plugins>
+
+            </build>
+        </profile>
+
+        <profile>
+            <!--profile two for smoke to run-->
+            <id>Smoke</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>3.6.0-M1</version>
+                        <configuration>
+                            <groups>smoke</groups>
+                        </configuration>
+                    </plugin>
+                </plugins>
+
+            </build>
+        </profile>
+
+    </profiles>
+
+
+//-----------------------//------------------------------------------//--------------------------------//------------------------------------------------------//-----------
+we can decide the browser type while execution if running throw maven command
+for that we will use command like   "mvn test -PSmoke -Dbrowser=chrome"   here -D is to Define SystemProperty
+for this we have to use java ternary operator in our framework where we define browser in setUp() method
+            variable = (condition) ? expression_if_true : expression_if_false;
+  String browserName = System.getProperty("browser") != null ? System.getProperty("browser") : prop.getProperty("browser");
+
+  NOTE: like above we can define any environment value at run time like env, timeout etc... those defined in config.properties file.....................
+        mvn test -PSmoke -Dbrowser=chrome -Devn=dev
+
+------------------------//----------------------------------------------------------------

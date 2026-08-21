@@ -1,0 +1,40 @@
+//we can generate beautiful report using Allure Library
+//for this we have to install node js in system and set environment path in System. refer "https://allurereport.org/docs/v3/install/"
+//then we have to install allure in side framework using terminal
+
+//then in pom.xml add below top of <dependencies>    refer "https://allurereport.org/docs/testng/"
+
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-bom</artifactId>
+            <version>${allure.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+//   and below inside dependencies
+
+    <dependency>
+        <groupId>io.qameta.allure</groupId>
+        <artifactId>allure-testng</artifactId>
+        <scope>test</scope>
+    </dependency>
+
+// and below in side properties
+
+     <allure.version>2.35.3</allure.version>
+
+//Allure, by default, saves test results in the project's root directory. However, it is recommended to store your test results in the build output directory.
+//To configure this, create an allure.properties file and place it in the test resources directory of your project, which is typically located at src/test/resources:
+
+  allure.results.directory=target/allure-results
+
+// now run your testcase using maven command
+ // now report will get generated in folder "target/allure-results"
+ // now run below command in maven terminal to see actual html report
+            allure serve target/allure-results
+
