@@ -1,3 +1,66 @@
 git init
 git add .                       add . means need to add all file in staginggit
 git status
+git config --global user.email "mauryar16@gmail.com"
+git config --global user.name "RajendraMAutomation"
+git commit -m "first push to repo"      // -m is for msg,   commit means lock the all file that need to push in repo
+git remote add origin git@github.com:RajendraMAutomation/PlayWrightJavaFramework.git
+git branch     //to check active branch
+git push --set-upstream origin master           //for the first time only
+git push origin
+
+
+---//---//---
+Git Bash setup
+I am using git Bash first time
+Welcome to Git Bash! It is the best tool for this because it uses standard Linux commands, making SSH setup much easier.
+Let's fix this step-by-step directly inside your Git Bash terminal.
+Step 1: Generate your new key
+Copy and paste this exact command into Git Bash (replace with your GitHub email), then press Enter:
+ssh-keygen -t ed25519 -C "your_email@example.com"
+•	What to do next: It will say "Enter file in which to save the key". Just press Enter to accept the default.
+•	Passphrase: It will ask for a passphrase. Press Enter twice to leave it blank (this is easiest for your first time).
+Step 2: Start the agent and load your key
+Run these two commands one after the other to make sure Git Bash is actively tracking your new key:
+eval "$(ssh-agent -s)"
+(You should see a message like Agent pid XXXX)
+ssh-add ~/.ssh/id_ed25519
+(You should see a message saying Identity added)
+Step 3: Copy the key to your clipboard
+Run this command to print your public key inside the Git Bash window:
+cat ~/.ssh/id_ed25519.pub
+•	Action item: Use your mouse to highlight the entire line of text that pops up (it will start with ssh-ed25519 and end with your email). Right-click and choose Copy.
+Step 4: Add it to GitHub
+1.	Open your web browser and go to your GitHub Settings page.
+2.	Click SSH and GPG keys on the left menu.
+3.	Click the green New SSH key button on the right.
+4.	Give it a title (like "My Laptop") and paste your copied text into the big Key box.
+5.	Click Add SSH key.
+Step 5: Test it and Push!
+Go back to Git Bash and test the connection by running:
+ssh -T git@github.com
+•	Important: It will ask you a yes/no question about the authenticity of the host. Type yes and press Enter.
+•	You should see a message welcoming you by your GitHub username!
+Finally, try pushing your project again:
+git push --set-upstream origin master
+________________________________________
+for every push, will it require to open gitbash
+Yes, you will need to use Git Bash (or another terminal) every time you want to send your local code changes up to GitHub.
+Here is exactly how the daily workflow looks now that your setup is complete.
+Your Daily 3-Step Workflow
+Whenever you finish writing new code or making changes in IntelliJ/VS Code, you will open Git Bash and run these three standard commands:
+1.	Stage your changes:
+2.	git add .
+3.	Commit your changes (save locally with a message):
+4.	git commit -m "added new test scripts"
+5.	Push to GitHub:
+6.	git push
+(Note: You do not need to type --set-upstream origin master anymore. Just git push will work from now on!)
+The Good News about your SSH Key
+You do not need to redo the SSH setup steps ever again. Your computer and GitHub will automatically remember each other in the background every time you type git push.
+Can you avoid Git Bash completely?
+Since you are working in an IntelliJ project (IdeaProjects), you actually don't have to use Git Bash if you don't want to. You can use the built-in terminal inside IntelliJ IDEA or use IntelliJ's Git GUI buttons (the green checkmark and blue arrow at the top right of your screen) to commit and push. Your SSH key will work perfectly there too!
+________________________________________
+
+
+
