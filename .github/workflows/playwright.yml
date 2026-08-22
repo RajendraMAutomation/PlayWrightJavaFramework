@@ -6,7 +6,7 @@ on:       #when to trigger the event automatically, we define two things i.e. on
     branches: [ main, master ]
 
   workflow_dispatch:
-    input:
+    inputs:
       browser:
         description: 'Browser to run test on'
         required: true
@@ -16,15 +16,15 @@ on:       #when to trigger the event automatically, we define two things i.e. on
           - chrome
           - firefox
           - safari
-    environment:
-      description: 'Environment to run tests against'
-      required: true
-      default: 'qa'
-      type: choice
-      options:
-        - qa
-        - prod
-        - dev
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+          - qa
+          - prod
+          - dev
 jobs:                           # what jobs we need to start, when push or pull request happen
   test:                         # we have to start test job
     timeout-minutes: 60
