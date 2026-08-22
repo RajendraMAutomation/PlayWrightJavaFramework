@@ -61,6 +61,46 @@ You do not need to redo the SSH setup steps ever again. Your computer and GitHub
 Can you avoid Git Bash completely?
 Since you are working in an IntelliJ project (IdeaProjects), you actually don't have to use Git Bash if you don't want to. You can use the built-in terminal inside IntelliJ IDEA or use IntelliJ's Git GUI buttons (the green checkmark and blue arrow at the top right of your screen) to commit and push. Your SSH key will work perfectly there too!
 ________________________________________
+ to check if there is nothing to push means all file are upto date on github
+        git status
+ it will show "On branch master
+               Your branch is up to date with 'origin/master'.
+               nothing to commit, working tree clean"
+
+
+...........................................
+how to delete a file from GitHub using Git Bash if you make a mistake?
+Yes, let's look at exactly how to delete a file using Git Bash.
+In Git, simply deleting a file on your computer by right-clicking it or hitting "Delete" in IntelliJ is not enough. Git will notice the file is missing, but it won't automatically remove it from GitHub until you commit and push that deletion.
+Here is the professional way to completely remove a file (like mytest.java) from both your computer and GitHub.
+## Step 1: Delete the file and tell Git
+Instead of using your mouse, use the git rm (Git remove) command in Git Bash. This deletes the file from your computer and stages the deletion instantly:
+
+git rm mytest.java
+
+## Step 2: Commit the deletion
+Save this removal into your local history with a message:
+
+git commit -m "removed accidental mytest java file"
+
+## Step 3: Push to GitHub
+Upload the deletion to your online repository:
+
+git push
+
+Once this finishes, the file will completely disappear from your GitHub website repository.
+------------------------------
+## 💡 What if you want to keep the file on your computer, but delete it ONLY from GitHub?
+Sometimes you accidentally upload a file containing secret passwords, or local IntelliJ config files (like a .idea folder) that do not belong on GitHub.
+To delete it from GitHub but keep it safe on your local computer, add the --cached flag:
+
+git rm --cached mytest.java
+git commit -m "removed file from github but kept it locally"
+git push
+
+
+
+
 
 
 
