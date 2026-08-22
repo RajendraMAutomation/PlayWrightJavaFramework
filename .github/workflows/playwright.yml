@@ -41,3 +41,10 @@ jobs:                           # what jobs we need to start, when push or pull 
         run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
       - name: Run tests
         run: mvn test -PFramework -Dbrowser=${{github.event.inputs.browser}} -Denv=${{github.event.inputs.environment}}          # mvn command to run the test
+      - name: Upload Playwright Report
+        if: always() # This ensures the report uploads even if a test fails
+        uses: actions/upload-artifact@v4
+        with:
+            name: playwright-html-report
+            path: target/surefire-report/ # Or playwright-report/ depending on your framework config
+            retention-days: 30
