@@ -1,22 +1,22 @@
 name: Playwright Tests
-on:
+on:       #when to trigger the event automatically, we define two things i.e. on push and on pull request
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-jobs:
-  test:
+jobs:                           # what jobs we need to start, when push or pull request happen
+  test:                         # we have to start test job
     timeout-minutes: 60
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest      # where to start test , on ubuntu latest Operating system on cloud server(ubuntu is inbult in Github.com)
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-java@v5
+      - uses: actions/checkout@v6     #Downloads (clones) your repository's source code into the virtual machine so the upcoming steps can access it.
+      - uses: actions/setup-java@v5   #Downloads and installs the Java Development Kit (JDK) on the virtual machine runner
         with:
-          distribution: 'temurin'
-          java-version: '26'
-      - name: Build & Install
-        run: mvn -B install -D skipTests --no-transfer-progress
+          distribution: 'temurin'     #Chooses the Eclipse Temurin (formerly AdoptOpenJDK) open-source distribution of Java.
+          java-version: '26'            # install java version, here we use java 26 as framework also uses same
+      - name: Build & Install           # name of below mvn command, name can be anything
+        run: mvn -B install -D skipTests --no-transfer-progress       #only do install i.e. import all mvn dependency but don't run
       - name: Ensure browsers are installed
         run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
       - name: Run tests
-        run: mvn test -PFramework -Dbrowser=chrome
+        run: mvn test -PFramework -Dbrowser=chrome          # mvn command to run the test

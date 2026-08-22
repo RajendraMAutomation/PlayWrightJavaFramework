@@ -1,0 +1,55 @@
+Here is the line-by-line explanation of your GitHub Actions workflow file.
+## Workflow Metadata & Triggers
+
+* name: Playwright Tests
+Sets the display name for this specific automation workflow in the GitHub Actions dashboard.
+* on:
+Defines the event triggers that will automatically start this workflow.
+* push:
+Triggers the workflow whenever code is pushed directly to the repository.
+* branches: [ main, master ]
+Restricts the push trigger so it only runs on the main or master branches.
+* pull_request:
+Triggers the workflow whenever a pull request is created, updated, or reopened.
+* branches: [ main, master ]
+Restricts the pull request trigger so it only runs if the target branch is main or master.
+
+## Job Definition & Environment
+
+* jobs:
+Groups together all the individual jobs that this workflow file will execute.
+* test:
+The unique ID/name given to this specific job.
+* timeout-minutes: 60
+Cancels the job automatically if it runs longer than 60 minutes to prevent stuck processes from wasting your runner minutes.
+* runs-on: ubuntu-latest
+Specifies that this job will execute on a fresh virtual machine running the latest stable version of Ubuntu Linux.
+
+## Execution Steps
+
+* steps:
+Contains the sequential list of actions and commands to run inside the virtual machine.
+* - uses: actions/checkout@v6
+Downloads (clones) your repository's source code into the virtual machine so the upcoming steps can access it.
+* - uses: actions/setup-java@v5
+Downloads and installs the Java Development Kit (JDK) on the virtual machine runner.
+* with:
+Passes configuration parameters to the Java setup action.
+* distribution: 'temurin'
+Chooses the Eclipse Temurin (formerly AdoptOpenJDK) open-source distribution of Java.
+* java-version: '25'
+Installs Java version 25 (Note: Change this to '26' to fix the build error you encountered earlier).
+* - name: Build & Install
+The display name for the upcoming Maven build compilation step.
+* run: mvn -B install -D skipTests --no-transfer-progress
+Compiles your Java code and installs the project dependencies. -B runs it in non-interactive batch mode, -D skipTests speeds it up by skipping unit tests during compilation, and --no-transfer-progress hides repetitive download progress logs.
+* - name: Ensure browsers are installed
+The display name for the Playwright browser setup step.
+* run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
+Uses Maven to execute Playwright's command-line interface. It downloads the required browser binaries (Chromium, Firefox, WebKit) and automatically installs any missing OS-level operating system dependencies (--with-deps).
+* - name: Run tests
+The display name for the final testing step.
+* run: mvn test
+Executes your actual Playwright framework test suites using Maven.
+
+-----------------------------
