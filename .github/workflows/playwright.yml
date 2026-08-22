@@ -40,4 +40,4 @@ jobs:                           # what jobs we need to start, when push or pull 
       - name: Ensure browsers are installed
         run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
       - name: Run tests
-        run: mvn test -PFramework -Dbrowser=${{github.event.input.browser}} -Denv=${{github.event.input.environment}}          # mvn command to run the test
+        run: mvn test -PFramework -Dbrowser=${{github.event.inputs.browser}} -Denv=${{github.event.inputs.environment}}          # mvn command to run the test

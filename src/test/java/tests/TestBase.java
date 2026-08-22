@@ -42,6 +42,7 @@ public class TestBase {
         page = browser.newPage();
         page.setDefaultTimeout(5000);
         base_url =  prop.getProperty(envName+".base_url");
+        System.out.println("Got Base Url is : "+base_url);
 
     }
 
