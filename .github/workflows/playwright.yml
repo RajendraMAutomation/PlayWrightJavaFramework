@@ -1,5 +1,5 @@
 name: Playwright Tests
-on:       #when to trigger the event automatically, we define two things i.e. on push and on pull request
+on: #when to trigger the event automatically, we define two things i.e. on push and on pull request
   push:
     branches: [ main, master ]
   pull_request:
@@ -25,8 +25,8 @@ on:       #when to trigger the event automatically, we define two things i.e. on
           - qa
           - prod
           - dev
-jobs:                           # what jobs we need to start, when push or pull request happen
-  test:                         # we have to start test job
+jobs: # what jobs we need to start, when push or pull request happen
+  test: # we have to start test job
     timeout-minutes: 60
     runs-on: ubuntu-latest      # where to start test , on ubuntu latest Operating system on cloud server(ubuntu is inbult in Github.com)
     steps:
@@ -40,11 +40,4 @@ jobs:                           # what jobs we need to start, when push or pull 
       - name: Ensure browsers are installed
         run: mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install --with-deps"
       - name: Run tests
-        run: mvn test -PFramework -Dbrowser=${{github.event.inputs.browser}} -Denv=${{github.event.inputs.environment}}          # mvn command to run the test
-      - name: Upload Playwright Report
-        if: always() # This ensures the report uploads even if a test fails
-        uses: actions/upload-artifact@v4
-        with:
-            name: playwright-html-report
-            path: target/surefire-report/ # Or playwright-report/ depending on your framework config
-            retention-days: 30
+        run: mvn test -PFramework -Dbrowser=${{github.event.inputs.browser || 'chrome' }} -Denv=${{github.event.inputs.environment || 'qa'}}          # mvn command to run the test
